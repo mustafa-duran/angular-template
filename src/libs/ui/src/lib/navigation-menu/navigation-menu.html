@@ -1,0 +1,88 @@
+<nav [attr.aria-label]="ariaLabel()" [class]="rootClasses()">
+  <ul [class]="listClasses()">
+    @for (item of items(); track trackItem($index, item); let index = $index) {
+    <li [class]="itemClasses()">
+      @if ((item.children?.length ?? 0) > 0) {
+      <ui-button
+        [variant]="triggerVariant"
+        [class]="resolveTriggerClasses(index)"
+        [attr.id]="resolveTriggerId(index)"
+        [attr.aria-expanded]="activeIndex() === index ? 'true' : 'false'"
+        [attr.aria-controls]="resolvePanelId(index)"
+        [attr.aria-haspopup]="'menu'"
+        [attr.data-state]="activeIndex() === index ? 'open' : 'closed'"
+        (pointerover)="openDropdown(index)"
+        (focus)="openDropdown(index)"
+        (click)="toggleDropdown(index)"
+      >
+        <span>{{ item.label }}</span>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 24 24"
+          class="relative top-[1px] transition duration-300"
+          [class.rotate-180]="activeIndex() === index"
+        >
+          <path
+            d="M6 9l6 6 6-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          />
+        </svg>
+      </ui-button>
+
+      <div
+        [class]="indicatorClasses()"
+        [attr.data-state]="activeIndex() === index ? 'visible' : 'hidden'"
+      >
+        <div [class]="indicatorShapeClasses()"></div>
+      </div>
+      } @else {
+      <a
+        [class]="linkClasses()"
+        [attr.id]="resolveTriggerId(index)"
+        [attr.href]="item.href ?? '#'"
+        [attr.target]="item.external ? '_blank' : null"
+        [attr.rel]="item.external ? 'noreferrer noopener' : null"
+        (focus)="handleLinkInteraction()"
+        (pointerenter)="handleLinkInteraction()"
+        (click)="handleLinkInteraction()"
+      >
+        {{ item.label }}
+      </a>
+      }
+    </li>
+    }
+  </ul>
+
+  @if (hasActiveDropdown()) {
+  <div [class]="viewportWrapperClasses()" (mouseleave)="handleViewportLeave()">
+    <div
+      [class]="viewportClasses()"
+      [attr.data-state]="viewportState()"
+      [attr.id]="viewportId()"
+      role="region"
+      [attr.aria-labelledby]="viewportLabelId()"
+    >
+      <div [class]="contentClasses()">
+        @for (child of activeChildren(); track trackChild($index, child); let childIndex = $index) {
+        <a
+          [class]="dropdownLinkClasses()"
+          [attr.href]="child.href"
+          [attr.target]="child.external ? '_blank' : null"
+          [attr.rel]="child.external ? 'noreferrer noopener' : null"
+        >
+          <div [class]="dropdownLabelClasses()">{{ child.label }}</div>
+          @if (child.description) {
+          <p [class]="dropdownDescriptionClasses()">{{ child.description }}</p>
+          }
+        </a>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</nav>
