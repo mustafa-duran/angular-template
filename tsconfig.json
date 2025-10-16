@@ -52,6 +52,9 @@
     },
     {
       "path": "./src/libs/ui/tsconfig.spec.json"
+    },
+    {
+      "path": "./src/apps/demo/tsconfig.app.json"
     }
   ]
 }
