@@ -40,20 +40,31 @@
       >
         <div [class]="indicatorShapeClasses()"></div>
       </div>
-      } @else {
+      } @else { @if (item.external) {
       <a
         [class]="linkClasses()"
         [attr.id]="resolveTriggerId(index)"
-        [attr.href]="item.href ?? '#'"
-        [attr.target]="item.external ? '_blank' : null"
-        [attr.rel]="item.external ? 'noreferrer noopener' : null"
+        [href]="item.href ?? '#'"
+        target="_blank"
+        rel="noreferrer noopener"
         (focus)="handleLinkInteraction()"
         (pointerenter)="handleLinkInteraction()"
         (click)="handleLinkInteraction()"
       >
         {{ item.label }}
       </a>
-      }
+      } @else {
+      <a
+        [class]="linkClasses()"
+        [attr.id]="resolveTriggerId(index)"
+        [routerLink]="resolveRouterLink(item.href)"
+        (focus)="handleLinkInteraction()"
+        (pointerenter)="handleLinkInteraction()"
+        (click)="handleLinkInteraction()"
+      >
+        {{ item.label }}
+      </a>
+      } }
     </li>
     }
   </ul>
@@ -69,18 +80,26 @@
     >
       <div [class]="contentClasses()">
         @for (child of activeChildren(); track trackChild($index, child); let childIndex = $index) {
+        @if (child.external) {
         <a
           [class]="dropdownLinkClasses()"
-          [attr.href]="child.href"
-          [attr.target]="child.external ? '_blank' : null"
-          [attr.rel]="child.external ? 'noreferrer noopener' : null"
+          [href]="child.href"
+          target="_blank"
+          rel="noreferrer noopener"
         >
           <div [class]="dropdownLabelClasses()">{{ child.label }}</div>
           @if (child.description) {
           <p [class]="dropdownDescriptionClasses()">{{ child.description }}</p>
           }
         </a>
-        }
+        } @else {
+        <a [class]="dropdownLinkClasses()" [routerLink]="resolveRouterLink(child.href)">
+          <div [class]="dropdownLabelClasses()">{{ child.label }}</div>
+          @if (child.description) {
+          <p [class]="dropdownDescriptionClasses()">{{ child.description }}</p>
+          }
+        </a>
+        } }
       </div>
     </div>
   </div>

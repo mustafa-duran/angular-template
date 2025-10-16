@@ -64,6 +64,7 @@ declare class UiNavigationMenuComponent {
     protected readonly viewportLabelId: _angular_core.Signal<string | null>;
     protected readonly trackItem: (index: number, item: NavigationMenuItem) => string;
     protected readonly trackChild: (index: number, child: NavigationMenuChild) => string;
+    protected resolveRouterLink(path: string | undefined | null): string;
     protected resolveTriggerId(index: number): string;
     protected resolvePanelId(index: number): string;
     protected resolveTriggerClasses(index: number): string;
@@ -84,7 +85,7 @@ declare const NAVIGATION_MENU_CLASSES: {
     readonly list: "group flex flex-1 list-none items-center justify-center gap-1";
     readonly item: "relative flex";
     readonly trigger: {
-        readonly base: "group w-max bg-background text-foreground [&_svg]:size-3 [&_svg]:transition [&_svg]:duration-300";
+        readonly base: "group w-max text-foreground [&_svg]:size-3 [&_svg]:transition [&_svg]:duration-300";
         readonly open: "bg-accent/50 text-accent-foreground hover:bg-accent focus:bg-accent";
     };
     readonly link: "inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 focus-visible:ring-offset focus-visible:ring-offset-background";

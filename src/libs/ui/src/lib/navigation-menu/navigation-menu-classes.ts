@@ -3,7 +3,7 @@ export const NAVIGATION_MENU_CLASSES = {
   list: 'group flex flex-1 list-none items-center justify-center gap-1',
   item: 'relative flex',
   trigger: {
-    base: 'group w-max bg-background text-foreground [&_svg]:size-3 [&_svg]:transition [&_svg]:duration-300',
+    base: 'group w-max text-foreground [&_svg]:size-3 [&_svg]:transition [&_svg]:duration-300',
     open: 'bg-accent/50 text-accent-foreground hover:bg-accent focus:bg-accent',
   },
   link: 'inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 focus-visible:ring-offset focus-visible:ring-offset-background',

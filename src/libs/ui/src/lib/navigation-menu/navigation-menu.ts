@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 
+import { RouterLink } from '@angular/router';
 import { joinClasses } from '@core';
 import { UiButtonComponent } from '../button';
 import { NAVIGATION_MENU_CLASSES } from './navigation-menu-classes';
@@ -15,7 +16,7 @@ import { NavigationMenuChild, NavigationMenuItem } from './navigation-menu-types
 
 @Component({
   selector: 'ui-navigation-menu',
-  imports: [UiButtonComponent],
+  imports: [UiButtonComponent, RouterLink],
   templateUrl: './navigation-menu.html',
   host: {
     class: 'contents',
@@ -98,6 +99,15 @@ export class UiNavigationMenuComponent {
 
   protected readonly trackChild = (index: number, child: NavigationMenuChild) =>
     child.id ?? `${child.label}-${index}`;
+
+  protected resolveRouterLink(path: string | undefined | null): string {
+    if (!path) {
+      return '/';
+    }
+
+    const normalized = path.trim();
+    return normalized.length > 0 ? normalized : '/';
+  }
 
   protected resolveTriggerId(index: number): string {
     return `${this.idPrefix}-trigger-${index}`;
