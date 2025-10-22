@@ -3,6 +3,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@core/*": ["./libs/core/src/lib/*"],
+      "@core/i18n": ["./libs/core/src/lib/i18n/public-api"],
+      "@ui/*": ["./libs/ui/src/lib/*"],
+      "@ui/select": ["./libs/ui/src/lib/select/public-api"]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -29,6 +35,18 @@
     },
     {
       "path": "./apps/web/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/core/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/core/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/ui/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/ui/tsconfig.spec.json"
     }
   ]
 }
