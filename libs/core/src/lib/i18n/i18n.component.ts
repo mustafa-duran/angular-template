@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
-import { SelectComponent, SelectOption } from '@ui/select';
+import { SelectComponent, SelectOption } from '@ui';
 
 import { I18nService } from './i18n.service';
 import { LanguageCode } from './i18n.types';
