@@ -5,9 +5,9 @@
   "compilerOptions": {
     "paths": {
       "@core/*": ["./libs/core/src/lib/*"],
-      "@core/i18n": ["./libs/core/src/lib/i18n/public-api"],
+      "@core/i18n": ["./libs/core/src/lib/i18n"],
       "@ui/*": ["./libs/ui/src/lib/*"],
-      "@ui/select": ["./libs/ui/src/lib/select/public-api"]
+      "@ui/select": ["./libs/ui/src/lib/select"]
     },
     "strict": true,
     "noImplicitOverride": true,
