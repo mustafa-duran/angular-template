@@ -76,15 +76,68 @@
               {
                 "glob": "**/*",
                 "input": "apps/web/public",
-                "output": "public"
+                "output": "."
               },
               {
                 "glob": "**/*",
                 "input": "public",
-                "output": "/"
+                "output": "."
               }
             ],
             "styles": ["public/styles/global.css"]
+          }
+        }
+      }
+    },
+
+    "core": {
+      "projectType": "library",
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
+      "prefix": "core",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/core/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/core/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "libs/core/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "ui": {
+      "projectType": "library",
+      "root": "libs/ui",
+      "sourceRoot": "libs/ui/src",
+      "prefix": "ui",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/ui/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/ui/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "libs/ui/tsconfig.spec.json"
           }
         }
       }
