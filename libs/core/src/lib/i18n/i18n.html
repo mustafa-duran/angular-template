@@ -1,0 +1,6 @@
+<ui-select
+  [options]="selectOptions()"
+  [selectedValue]="selectedValue()"
+  [placeholder]="'Select language'"
+  (selectionChange)="onLanguageSelected($event)"
+/>
