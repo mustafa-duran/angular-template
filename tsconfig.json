@@ -9,7 +9,8 @@
       "@core/i18n": ["./libs/core/src/lib/i18n"],
       "@core/utils": ["./libs/core/src/lib/utils"],
       "@ui/*": ["./libs/ui/src/lib/*"],
-      "@ui/select": ["./libs/ui/src/lib/select"]
+      "@ui/select": ["./libs/ui/src/lib/select"],
+      "@ui/button": ["./libs/ui/src/lib/button"]
     },
     "strict": true,
     "noImplicitOverride": true,
