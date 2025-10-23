@@ -119,26 +119,12 @@ export class FormComponent {
 }
 ```
 
-## 🎯 Özellikler
+### Types
 
-- ✅ **Signal-based** - Modern Angular reactive patterns
-- ✅ **6 Variants** - Farklı kullanım senaryoları için stiller
-- ✅ **4 Sizes** - Esnek boyutlandırma seçenekleri
-- ✅ **RouterLink** - Angular routing desteği
-- ✅ **Accessibility** - ARIA attributes ve keyboard navigation
-- ✅ **Type-safe** - TypeScript ile tam tip güvenliği
-- ✅ **Customizable** - Custom class desteği
-- ✅ **Tailwind CSS** - Utility-first styling
+```typescript
+type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
 
-## 📁 Dosya Yapısı
-
-```
-button/
-├── button.component.ts    # Ana component
-├── button.constants.ts    # CSS class tanımları
-├── button.html            # Template
-├── button.types.ts        # Type tanımları
-└── index.ts              # Public API
+type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 ```
 
 ## 🔧 API
@@ -152,31 +138,3 @@ button/
 | `disabled` | `boolean`                         | `false`     | Disabled durumu   |
 | `type`     | `'button' \| 'submit' \| 'reset'` | `'button'`  | HTML button type  |
 | `class`    | `string`                          | `''`        | Ek CSS class'ları |
-
-### Types
-
-```typescript
-type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-
-type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
-```
-
-## 🎨 Customization
-
-Button renkleri CSS değişkenleri ile kontrol edilir:
-
-```css
---primary
---primary-foreground
---destructive
---destructive-foreground
---secondary
---secondary-foreground
---accent
---accent-foreground
---border
---input
---ring
-```
-
-Bu değişkenler `global.css` dosyasında tanımlanmıştır ve tema değişikliklerini destekler.
