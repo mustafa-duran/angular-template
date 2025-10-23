@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "@core/*": ["./libs/core/src/lib/*"],
       "@core/i18n": ["./libs/core/src/lib/i18n"],
