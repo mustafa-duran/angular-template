@@ -137,7 +137,6 @@ i18nService.setProjectName('admin');
 - ✅ **Interpolation** - `{{variable}}` ile parametre desteği
 - ✅ **Cache-busting** - HTTP interceptor ile otomatik versiyon kontrolü
 - ✅ **40 Dil** - Hazır dil seçenekleri (constants'ta)
-- ✅ **Language Filter** - `selectLanguages()` utility ile istediğiniz dilleri seçin
 
 ## 📁 Dosya Yapısı
 
@@ -155,8 +154,6 @@ i18n/
 
 ## 🔧 Yapılandırma
 
-### I18nConfig Interface
-
 ```typescript
 export interface I18nConfig {
   languages: LanguageOption[]; // Desteklenen diller
@@ -165,21 +162,4 @@ export interface I18nConfig {
 }
 ```
 
-### Dil Seçimi (selectLanguages)
-
-Tüm dilleri kullanmak yerine sadece ihtiyacınız olanları seçebilirsiniz:
-
-```typescript
-import { selectLanguages } from '@core/utils';
-import { LANGUAGE_OPTIONS } from '@core/i18n';
-
-// Sadece belirli dilleri seç
-const myLanguages = selectLanguages(LANGUAGE_OPTIONS, 'en', 'tr', 'de', 'fr');
-
-// Config'de kullan
-provideI18nConfig({
-  languages: myLanguages,
-  defaultLanguage: 'en',
-  projectName: 'web'
-});
-```
+**Not:** `selectLanguages` utility fonksiyonu ile 40 hazır dilden sadece ihtiyacınız olanları seçebilirsiniz (yukarıdaki kurulum örneğinde gösterildiği gibi).
