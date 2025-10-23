@@ -8,9 +8,11 @@
       "@core/*": ["./libs/core/src/lib/*"],
       "@core/i18n": ["./libs/core/src/lib/i18n"],
       "@core/utils": ["./libs/core/src/lib/utils"],
+
       "@ui/*": ["./libs/ui/src/lib/*"],
       "@ui/select": ["./libs/ui/src/lib/select"],
-      "@ui/button": ["./libs/ui/src/lib/button"]
+      "@ui/button": ["./libs/ui/src/lib/button"],
+      "@ui/dialog": ["./libs/ui/src/lib/dialog"]
     },
     "strict": true,
     "noImplicitOverride": true,
