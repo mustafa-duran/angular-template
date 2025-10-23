@@ -1,62 +1,56 @@
 # @ui/button
 
-shadcn/ui'den esinlenen Angular button komponenti. Signal-based reaktif yapı ve Tailwind CSS ile stillendirilmiştir.
-
-## 📦 İçerik
-
-- **ButtonComponent** - Çoklu variant ve size desteği olan button komponenti
-- **ButtonVariant** - 6 farklı görsel stil (default, destructive, outline, secondary, ghost, link)
-- **ButtonSize** - 4 farklı boyut (default, sm, lg, icon)
+shadcn/ui tarzı button komponenti. 6 variant, 4 size seçeneği.
 
 ## 🚀 Kullanım
-
-### Import
 
 ```typescript
 import { ButtonComponent } from '@ui/button';
 
 @Component({
-  selector: 'app-example',
   imports: [ButtonComponent],
-  template: `<ui-button>Click me</ui-button>`
+  template: `<ui-button>Click</ui-button>`
 })
-export class ExampleComponent {}
-```
-
-### Temel Kullanım
-
-```html
-<!-- Default button -->
-<ui-button>Click me</ui-button>
-
-<!-- Submit button -->
-<ui-button type="submit">Submit</ui-button>
-
-<!-- Disabled button -->
-<ui-button [disabled]="true">Disabled</ui-button>
 ```
 
 ### Variants
 
+````html
 ```html
-<!-- Default (primary) -->
 <ui-button variant="default">Default</ui-button>
-
-<!-- Destructive (kırmızı) -->
 <ui-button variant="destructive">Delete</ui-button>
-
-<!-- Outline (çerçeveli) -->
 <ui-button variant="outline">Outline</ui-button>
-
-<!-- Secondary (ikincil) -->
 <ui-button variant="secondary">Secondary</ui-button>
-
-<!-- Ghost (transparan) -->
 <ui-button variant="ghost">Ghost</ui-button>
-
-<!-- Link (bağlantı) -->
 <ui-button variant="link">Link</ui-button>
+````
+
+### Sizes
+
+```html
+<ui-button size="sm">Small</ui-button>
+<ui-button size="default">Default</ui-button>
+<ui-button size="lg">Large</ui-button>
+<ui-button size="icon"><svg>...</svg></ui-button>
 ```
+
+### Diğer
+
+```html
+<!-- Disabled -->
+<ui-button [disabled]="true">Disabled</ui-button>
+
+<!-- RouterLink -->
+<ui-button routerLink="/home">Home</ui-button>
+
+<!-- Custom class -->
+<ui-button class="w-full">Full width</ui-button>
+
+<!-- Form -->
+<ui-button type="submit">Submit</ui-button>
+```
+
+````
 
 ### Sizes
 
@@ -74,7 +68,7 @@ export class ExampleComponent {}
 <ui-button size="icon">
   <svg>...</svg>
 </ui-button>
-```
+````
 
 ### RouterLink ile Kullanım
 
