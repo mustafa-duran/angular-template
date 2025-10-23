@@ -15,7 +15,6 @@ import {
 
 @Component({
   selector: 'ui-dialog',
-  standalone: true,
   imports: [],
   templateUrl: './dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -13,7 +13,6 @@ export class DialogHeaderComponent {}
 
 @Component({
   selector: 'ui-dialog-footer',
-  standalone: true,
   template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
