@@ -17,13 +17,14 @@ Angular çoklu dil desteği (internationalization) modülü. Signal-based reakti
 
 ```typescript
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideI18nConfig, i18nInterceptor } from '@core/i18n';
+import { i18nInterceptor, LANGUAGE_OPTIONS, provideI18nConfig } from '@core/i18n';
+import { selectLanguages } from '@core/utils';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(withInterceptors([i18nInterceptor])),
     provideI18nConfig({
-      languages: LANGUAGE_OPTIONS, // i18n.constants.ts'den
+      languages: selectLanguages(LANGUAGE_OPTIONS, 'en', 'tr'), // Sadece istediğiniz dilleri seçin
       defaultLanguage: 'en',
       projectName: 'web'
     })
@@ -132,10 +133,11 @@ i18nService.setProjectName('admin');
 - ✅ **Signal-based** - Reaktif ve performanslı
 - ✅ **LocalStorage** - Seçilen dil otomatik kaydedilir
 - ✅ **Lazy Loading** - Çeviri dosyaları ihtiyaç anında yüklenir
-- ✅ **Nested Keys** - `'user.profile.name'` şeklinde中iç içe anahtarlar
+- ✅ **Nested Keys** - `'user.profile.name'` şeklinde iç içe anahtarlar
 - ✅ **Interpolation** - `{{variable}}` ile parametre desteği
 - ✅ **Cache-busting** - HTTP interceptor ile otomatik versiyon kontrolü
 - ✅ **40 Dil** - Hazır dil seçenekleri (constants'ta)
+- ✅ **Language Filter** - `selectLanguages()` utility ile istediğiniz dilleri seçin
 
 ## 📁 Dosya Yapısı
 
@@ -153,10 +155,31 @@ i18n/
 
 ## 🔧 Yapılandırma
 
+### I18nConfig Interface
+
 ```typescript
 export interface I18nConfig {
   languages: LanguageOption[]; // Desteklenen diller
   defaultLanguage?: LanguageCode; // Varsayılan dil (default: 'en')
   projectName?: string; // Proje adı (default: 'web')
 }
+```
+
+### Dil Seçimi (selectLanguages)
+
+Tüm dilleri kullanmak yerine sadece ihtiyacınız olanları seçebilirsiniz:
+
+```typescript
+import { selectLanguages } from '@core/utils';
+import { LANGUAGE_OPTIONS } from '@core/i18n';
+
+// Sadece belirli dilleri seç
+const myLanguages = selectLanguages(LANGUAGE_OPTIONS, 'en', 'tr', 'de', 'fr');
+
+// Config'de kullan
+provideI18nConfig({
+  languages: myLanguages,
+  defaultLanguage: 'en',
+  projectName: 'web'
+});
 ```
