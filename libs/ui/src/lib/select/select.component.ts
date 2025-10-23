@@ -9,11 +9,7 @@ import {
   Output,
   signal
 } from '@angular/core';
-
-export interface SelectOption {
-  value: string;
-  label: string;
-}
+import { SelectOption } from './select.types';
 
 @Component({
   selector: 'ui-select',
