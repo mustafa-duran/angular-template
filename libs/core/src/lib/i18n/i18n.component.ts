@@ -5,7 +5,7 @@ import { I18nService } from './i18n.service';
 import { LanguageCode } from './i18n.types';
 
 @Component({
-  selector: 'core-i18n-component',
+  selector: 'core-i18n-select',
   standalone: true,
   imports: [SelectComponent],
   templateUrl: './i18n.html',
@@ -14,7 +14,7 @@ import { LanguageCode } from './i18n.types';
     class: 'flex flex-col gap-2 text-sm text-foreground'
   }
 })
-export class I18nComponent {
+export class I18nSelectComponent {
   private readonly i18nService = inject(I18nService);
 
   readonly selectOptions = computed<SelectOption[]>(() =>
