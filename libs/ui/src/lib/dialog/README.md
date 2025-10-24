@@ -74,11 +74,3 @@ export class MyComponent {
 **Outputs:**
 
 - `openChange` - Dialog durumu değiştiğinde
-
-## Özellikler
-
-- ✅ Escape ile kapatma
-- ✅ Overlay click ile kapatma
-- ✅ Body scroll kilitleme
-- ✅ Animasyonlu açılma/kapanma
-- ✅ Keyboard accessible

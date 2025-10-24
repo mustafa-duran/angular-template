@@ -1,55 +1,50 @@
 # @ui/select
 
-Dropdown select komponenti.
+Signal tabanlı dropdown select komponenti.
 
 ## Kullanım
 
 ```typescript
+import { Component, signal } from '@angular/core';
 import { SelectComponent, SelectOption } from '@ui/select';
 
 @Component({
   imports: [SelectComponent],
   template: `
     <ui-select
-      [options]="options"
-      [selectedValue]="selected"
-      placeholder="Seçiniz"
-      (selectionChange)="onSelect($event)"
+      [options]="languageOptions"
+      [selectedValue]="activeLanguage()"
+      placeholder="Dil seçiniz"
+      (selectionChange)="setLanguage($event)"
+      (optionSelected)="logOption($event)"
     />
   `
 })
-export class MyComponent {
-  options: SelectOption[] = [
+export class LanguageSelectComponent {
+  readonly languageOptions: SelectOption[] = [
     { value: 'tr', label: 'Türkçe' },
-    { value: 'en', label: 'English' }
+    { value: 'en', label: 'English' },
+    { value: 'de', label: 'Deutsch' }
   ];
 
-  selected = 'tr';
+  activeLanguage = signal<string | null>('tr');
 
-  onSelect(value: string) {
-    console.log(value);
+  setLanguage(code: string): void {
+    this.activeLanguage.set(code);
+  }
+
+  logOption(option: SelectOption): void {
+    console.log(option);
   }
 }
 ```
 
 ## API
 
-**Inputs:**
+- `options: ReadonlyArray<SelectOption>`
+- `selectedValue: string | null`
+- `placeholder: string = 'Select an option'`
+- `selectionChange: EventEmitter<string>`
+- `optionSelected: EventEmitter<SelectOption>`
 
-- `options` - Seçenek listesi
-- `selectedValue` - Seçili değer
-- `placeholder` - Placeholder metni
-
-**Outputs:**
-
-- `selectionChange` - Değer değiştiğinde (string)
-- `optionSelected` - Değer değiştiğinde (SelectOption)
-
-## Types
-
-```typescript
-interface SelectOption {
-  value: string;
-  label: string;
-}
-```
+`SelectOption` tipi `{ value: string; label: string; }` şeklindedir.
