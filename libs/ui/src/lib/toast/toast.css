@@ -1,0 +1,82 @@
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--index, 0) * var(--stack-offset) - 18px))
+      scale(clamp(0.78, calc(1 - var(--index, 0) * var(--stack-scale-step) - 0.04), 1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(calc(var(--index, 0) * var(--stack-offset)))
+      scale(clamp(0.78, calc(1 - var(--index, 0) * var(--stack-scale-step)), 1));
+  }
+}
+
+@keyframes toast-exit {
+  from {
+    opacity: 1;
+    transform: translateY(calc(var(--index, 0) * var(--stack-offset)))
+      scale(clamp(0.78, calc(1 - var(--index, 0) * var(--stack-scale-step)), 1));
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--index, 0) * var(--stack-offset) - 20px))
+      scale(clamp(0.7, calc(1 - var(--index, 0) * var(--stack-scale-step) - 0.05), 1));
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 2.5s linear infinite;
+}
+
+[data-toast-container] {
+  --gap: 12px;
+  --stack-offset: calc(-1 * (var(--gap) + 54px));
+  --stack-scale-step: 0.06;
+  --stack-opacity-step: 0.18;
+  padding: 16px;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+}
+
+[data-toast-container]:hover {
+  pointer-events: auto;
+  --stack-offset: 0px;
+  --stack-scale-step: 0;
+  --stack-opacity-step: 0;
+}
+
+.toast-item {
+  --scale: clamp(0.78, calc(1 - var(--index, 0) * var(--stack-scale-step)), 1);
+  position: relative;
+  pointer-events: auto;
+  transform-origin: center;
+  transform: translateY(calc(var(--index, 0) * var(--stack-offset))) scale(var(--scale));
+  opacity: clamp(0.45, calc(1 - var(--index, 0) * var(--stack-opacity-step)), 1);
+  transition:
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 280ms ease,
+    box-shadow 280ms ease;
+  will-change: transform, opacity;
+}
+
+.toast-item:hover {
+  z-index: 100;
+}
+
+[data-toast-id] {
+  animation: toast-enter 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[data-toast-id].removing {
+  animation: toast-exit 320ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
