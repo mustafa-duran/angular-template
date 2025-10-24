@@ -12,7 +12,8 @@
       "@ui/*": ["./libs/ui/src/lib/*"],
       "@ui/select": ["./libs/ui/src/lib/select"],
       "@ui/button": ["./libs/ui/src/lib/button"],
-      "@ui/dialog": ["./libs/ui/src/lib/dialog"]
+      "@ui/dialog": ["./libs/ui/src/lib/dialog"],
+      "@ui/sonner": ["libs/ui/src/lib/toast"]
     },
     "strict": true,
     "noImplicitOverride": true,
