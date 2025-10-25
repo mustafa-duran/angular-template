@@ -11,6 +11,8 @@ export class ToastService {
   private toastIdCounter = 0;
   private timers = new Map<string, { timeoutId: any; remaining: number; startTime: number }>();
   private pausedToasts = new Set<string>();
+  private removalTimers = new Map<string, any>();
+  private readonly exitAnimationDuration = 360;
 
   readonly toasts$ = this.toasts.asReadonly();
   readonly config$ = this.config.asReadonly();
@@ -32,7 +34,8 @@ export class ToastService {
       cancel: options?.cancel,
       duration,
       dismissible: options?.dismissible ?? true,
-      className: options?.className
+      className: options?.className,
+      removing: false
     };
 
     this.toasts.update((toasts) => [...toasts, toast]);
@@ -95,14 +98,24 @@ export class ToastService {
   }
 
   dismiss(id: string): void {
-    this.toasts.update((toasts) => toasts.filter((t) => t.id !== id));
+    const toast = this.toasts().find((t) => t.id === id);
+    if (!toast || toast.removing) {
+      return;
+    }
+
+    this.clearTimer(id);
+
+    this.toasts.update((toasts) =>
+      toasts.map((current) => (current.id === id ? { ...current, removing: true } : current))
+    );
+
+    this.scheduleRemoval(id);
   }
 
   dismissAll(): void {
-    this.toasts.set([]);
-    this.timers.forEach(({ timeoutId }) => clearTimeout(timeoutId));
-    this.timers.clear();
-    this.pausedToasts.clear();
+    this.toasts()
+      .filter((toast) => !toast.removing)
+      .forEach((toast) => this.dismiss(toast.id));
   }
 
   update(id: string, updates: Partial<Toast>): void {
@@ -122,6 +135,11 @@ export class ToastService {
   }
 
   pauseTimer(id: string): void {
+    const toast = this.toasts().find((t) => t.id === id);
+    if (!toast || toast.removing) {
+      return;
+    }
+
     const timer = this.timers.get(id);
     if (timer && !this.pausedToasts.has(id)) {
       clearTimeout(timer.timeoutId);
@@ -131,6 +149,11 @@ export class ToastService {
   }
 
   resumeTimer(id: string): void {
+    const toast = this.toasts().find((t) => t.id === id);
+    if (!toast || toast.removing) {
+      return;
+    }
+
     const timer = this.timers.get(id);
     if (timer && this.pausedToasts.has(id)) {
       const newTimeoutId = setTimeout(() => {
@@ -143,5 +166,28 @@ export class ToastService {
       timer.startTime = Date.now();
       this.pausedToasts.delete(id);
     }
+  }
+
+  private clearTimer(id: string): void {
+    const timer = this.timers.get(id);
+    if (timer) {
+      clearTimeout(timer.timeoutId);
+      this.timers.delete(id);
+    }
+
+    this.pausedToasts.delete(id);
+  }
+
+  private scheduleRemoval(id: string): void {
+    if (this.removalTimers.has(id)) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      this.removalTimers.delete(id);
+      this.toasts.update((toasts) => toasts.filter((toast) => toast.id !== id));
+    }, this.exitAnimationDuration);
+
+    this.removalTimers.set(id, timeoutId);
   }
 }

@@ -1,3 +1,21 @@
+@property --stack-offset {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --stack-scale-step {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --stack-opacity-step {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 @keyframes toast-enter {
   from {
     opacity: 0;
@@ -24,16 +42,6 @@
   }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 2.5s linear infinite;
-}
-
 [data-toast-container] {
   --gap: 12px;
   --stack-offset: calc(-1 * (var(--gap) + 54px));
@@ -45,6 +53,10 @@
   flex-direction: column;
   align-items: center;
   gap: var(--gap);
+  transition:
+    --stack-offset 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    --stack-scale-step 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    --stack-opacity-step 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-toast-container]:hover {
@@ -61,16 +73,19 @@
   transform-origin: center;
   transform: translateY(calc(var(--index, 0) * var(--stack-offset))) scale(var(--scale));
   opacity: clamp(0.45, calc(1 - var(--index, 0) * var(--stack-opacity-step)), 1);
+  filter: brightness(1);
   transition:
     transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 420ms cubic-bezier(0.16, 1, 0.3, 1),
     filter 280ms ease,
     box-shadow 280ms ease;
+  transition-delay: calc(var(--index, 0) * 40ms);
   will-change: transform, opacity;
 }
 
 .toast-item:hover {
   z-index: 100;
+  filter: brightness(1.04);
 }
 
 [data-toast-id] {
@@ -79,4 +94,8 @@
 
 [data-toast-id].removing {
   animation: toast-exit 320ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.toast-item.removing {
+  pointer-events: none;
 }

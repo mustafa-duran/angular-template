@@ -16,10 +16,10 @@ export const DEFAULT_TOASTER_CONFIG: ToasterConfig = {
 export const TOASTER_CLASSES = 'toaster group';
 
 export const TOAST_CLASSES = {
-  base: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg select-none',
-  description: 'group-[.toast]:text-muted-foreground',
-  actionButton: 'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
-  cancelButton: 'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground'
+  base: 'group toast select-none',
+  description: 'text-muted-foreground',
+  actionButton: 'bg-primary text-primary-foreground',
+  cancelButton: 'bg-muted text-muted-foreground'
 };
 
 export const TOAST_POSITION_CLASSES: Record<string, string> = {

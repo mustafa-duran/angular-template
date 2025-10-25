@@ -23,6 +23,7 @@ export interface Toast {
   duration?: number;
   dismissible?: boolean;
   className?: string;
+  removing?: boolean;
 }
 
 export interface ToasterConfig {

@@ -59,10 +59,25 @@ export class ToastComponent implements OnDestroy {
       TOAST_POSITION_CLASSES['top-center']
   );
 
-  containerStyles = computed(() => ({
-    '--offset': this.offset(),
-    '--gap': `${this.gap()}px`
-  }));
+  containerStyles = computed(() => {
+    const gap = `${this.gap()}px`;
+    const offset = this.offset();
+    const position = this.position() ?? DEFAULT_TOASTER_CONFIG.position;
+
+    const styles: Record<string, string> = {
+      '--gap': gap
+    };
+
+    if (position?.startsWith('top')) {
+      styles['top'] = offset;
+      styles['bottom'] = 'unset';
+    } else {
+      styles['bottom'] = offset;
+      styles['top'] = 'unset';
+    }
+
+    return styles;
+  });
 
   constructor() {
     effect(() => {
@@ -118,6 +133,10 @@ export class ToastComponent implements OnDestroy {
   onContainerHover(action: 'enter' | 'leave'): void {
     const currentToasts = this.toasts();
     currentToasts.forEach((toast) => {
+      if (toast.removing) {
+        return;
+      }
+
       if (action === 'enter') {
         this.toastService.pauseTimer(toast.id);
       } else {

@@ -6,7 +6,7 @@
   [class]="toasterClasses + ' ' + className()"
   [ngClass]="positionClasses()"
   [ngStyle]="containerStyles()"
-  class="fixed z-100 flex flex-col p-2"
+  class="fixed z-100"
   (mouseenter)="onContainerHover('enter')"
   (mouseleave)="onContainerHover('leave')"
 >
@@ -19,6 +19,7 @@
       [class]="getToastClasses(toast)"
       [style.z-index]="visibleToastsList().length - idx"
       class="toast-item relative flex items-center justify-between w-[356px] gap-4 rounded-lg border bg-background p-4 shadow-lg"
+      [class.removing]="toast.removing"
     >
       <div class="flex items-center gap-3 flex-1">
         @if (toast.type !== 'default') {
