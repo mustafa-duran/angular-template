@@ -8,11 +8,9 @@ import {
   input,
   OnDestroy
 } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
   DEFAULT_TOASTER_CONFIG,
   TOAST_CLASSES,
-  TOAST_ICONS,
   TOAST_POSITION_CLASSES,
   TOASTER_CLASSES
 } from './toast.constants';
@@ -28,13 +26,11 @@ import type { Toast, ToasterConfig } from './toast.types';
 })
 export class ToastComponent implements OnDestroy {
   private readonly toastService = inject(ToastService);
-  private readonly sanitizer = inject(DomSanitizer);
 
   position = input<ToasterConfig['position']>(DEFAULT_TOASTER_CONFIG.position);
   expand = input<boolean>(DEFAULT_TOASTER_CONFIG.expand ?? false);
   visibleToasts = input<number>(DEFAULT_TOASTER_CONFIG.visibleToasts ?? 3);
   closeButton = input<boolean>(DEFAULT_TOASTER_CONFIG.closeButton ?? false);
-  richColors = input<boolean>(DEFAULT_TOASTER_CONFIG.richColors ?? false);
   offset = input<string>(DEFAULT_TOASTER_CONFIG.offset ?? '32px');
   dir = input<ToasterConfig['dir']>(DEFAULT_TOASTER_CONFIG.dir);
   theme = input<ToasterConfig['theme']>(DEFAULT_TOASTER_CONFIG.theme);
@@ -86,7 +82,6 @@ export class ToastComponent implements OnDestroy {
         expand: this.expand(),
         visibleToasts: this.visibleToasts(),
         closeButton: this.closeButton(),
-        richColors: this.richColors(),
         offset: this.offset(),
         dir: this.dir(),
         theme: this.theme(),
@@ -99,17 +94,11 @@ export class ToastComponent implements OnDestroy {
     this.toastService.dismissAll();
   }
 
-  getToastIcon(type: Toast['type']): SafeHtml {
-    const iconSvg = TOAST_ICONS[type] ?? '';
-    return this.sanitizer.bypassSecurityTrustHtml(iconSvg);
-  }
-
   getToastClasses(toast: Toast): string {
     const baseClass = this.toastClasses.base;
     const customClass = toast.className ?? '';
-    const richColorClass = this.richColors() ? `toast-${toast.type}` : '';
 
-    return [baseClass, richColorClass, customClass].filter(Boolean).join(' ');
+    return [baseClass, customClass].filter(Boolean).join(' ');
   }
 
   dismiss(id: string): void {

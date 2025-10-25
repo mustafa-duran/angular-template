@@ -1,52 +1,36 @@
 <div
   [attr.data-toast-container]="true"
   [attr.data-theme]="theme()"
-  [attr.data-rich-colors]="richColors()"
   [attr.dir]="dir()"
-  [class]="toasterClasses + ' ' + className()"
-  [ngClass]="positionClasses()"
+  [ngClass]="[toasterClasses, positionClasses(), className()]"
   [ngStyle]="containerStyles()"
-  class="fixed z-100"
   (mouseenter)="onContainerHover('enter')"
   (mouseleave)="onContainerHover('leave')"
 >
-  @for (toast of visibleToastsList(); track toast.id; let idx = $index) {
+  @for (toast of visibleToastsList(); track toast.id; let idx = $index; let count = $count) {
     <div
       [attr.data-toast-id]="toast.id"
-      [attr.data-type]="toast.type"
       [attr.data-index]="idx"
       [style.--index]="idx"
       [class]="getToastClasses(toast)"
-      [style.z-index]="visibleToastsList().length - idx"
-      class="toast-item relative flex items-center justify-between w-[356px] gap-4 rounded-lg border bg-background p-4 shadow-lg"
+      [style.z-index]="count - idx"
       [class.removing]="toast.removing"
     >
-      <div class="flex items-center gap-3 flex-1">
-        @if (toast.type !== 'default') {
-          <div class="shrink-0" [innerHTML]="getToastIcon(toast.type)"></div>
+      <div class="flex flex-1 flex-col gap-1">
+        @if (toast.title) {
+          <div class="text-sm font-semibold">{{ toast.title }}</div>
         }
-
-        <div class="flex flex-col gap-1">
-          @if (toast.title) {
-            <div class="text-sm font-semibold">{{ toast.title }}</div>
-          }
-          @if (toast.description) {
-            <div [class]="toastClasses.description" class="text-sm opacity-90">
-              {{ toast.description }}
-            </div>
-          }
-        </div>
+        @if (toast.description) {
+          <div [class]="toastClasses.description">
+            {{ toast.description }}
+          </div>
+        }
       </div>
 
       <div class="flex shrink-0 items-center gap-2">
         @if (toast.action || toast.cancel) {
           @if (toast.cancel) {
-            <button
-              type="button"
-              [class]="toastClasses.cancelButton"
-              (click)="handleCancel(toast)"
-              class="inline-flex h-8 shrink-0 items-center justify-center rounded-md border px-3 text-xs font-medium transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-            >
+            <button type="button" [class]="toastClasses.cancelButton" (click)="handleCancel(toast)">
               {{ toast.cancel.label }}
             </button>
           }
@@ -55,7 +39,6 @@
               type="button"
               [class]="toastClasses.actionButton"
               (click)="handleAction(toast.action)"
-              class="inline-flex h-8 shrink-0 items-center justify-center rounded-md px-3 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               {{ toast.action.label }}
             </button>

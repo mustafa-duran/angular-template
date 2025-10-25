@@ -1,5 +1,3 @@
-export type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading';
-
 export type ToastPosition =
   | 'top-left'
   | 'top-center'
@@ -15,7 +13,6 @@ export interface ToastAction {
 
 export interface Toast {
   id: string;
-  type: ToastType;
   title?: string;
   description?: string;
   action?: ToastAction;
@@ -31,7 +28,6 @@ export interface ToasterConfig {
   expand?: boolean;
   visibleToasts?: number;
   closeButton?: boolean;
-  richColors?: boolean;
   duration?: number;
   gap?: number;
   theme?: 'light' | 'dark' | 'system';
@@ -42,7 +38,6 @@ export interface ToasterConfig {
 }
 
 export interface ToastOptions {
-  type?: ToastType;
   description?: string;
   action?: ToastAction;
   cancel?: ToastAction;

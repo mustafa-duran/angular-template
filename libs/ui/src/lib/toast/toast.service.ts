@@ -27,7 +27,6 @@ export class ToastService {
 
     const toast: Toast = {
       id,
-      type: options?.type ?? 'default',
       title,
       description: options?.description,
       action: options?.action,
@@ -40,7 +39,7 @@ export class ToastService {
 
     this.toasts.update((toasts) => [...toasts, toast]);
 
-    if (duration > 0 && toast.type !== 'loading') {
+    if (duration > 0) {
       this.startTimer(id, duration);
     }
 
@@ -48,53 +47,7 @@ export class ToastService {
   }
 
   toast(title: string, options?: ToastOptions): string {
-    return this.createToast(title, { ...options, type: 'default' });
-  }
-
-  success(title: string, options?: Omit<ToastOptions, 'type'>): string {
-    return this.createToast(title, { ...options, type: 'success' });
-  }
-
-  error(title: string, options?: Omit<ToastOptions, 'type'>): string {
-    return this.createToast(title, { ...options, type: 'error' });
-  }
-
-  warning(title: string, options?: Omit<ToastOptions, 'type'>): string {
-    return this.createToast(title, { ...options, type: 'warning' });
-  }
-
-  info(title: string, options?: Omit<ToastOptions, 'type'>): string {
-    return this.createToast(title, { ...options, type: 'info' });
-  }
-
-  loading(title: string, options?: Omit<ToastOptions, 'type'>): string {
-    return this.createToast(title, { ...options, type: 'loading', duration: 0 });
-  }
-
-  promise<T>(
-    promise: Promise<T>,
-    options: {
-      loading: string;
-      success: string | ((data: T) => string);
-      error: string | ((error: Error) => string);
-    }
-  ): Promise<T> {
-    const id = this.loading(options.loading);
-
-    return promise
-      .then((data) => {
-        this.dismiss(id);
-        const message =
-          typeof options.success === 'function' ? options.success(data) : options.success;
-        this.success(message);
-        return data;
-      })
-      .catch((error: Error) => {
-        this.dismiss(id);
-        const message = typeof options.error === 'function' ? options.error(error) : options.error;
-        this.error(message);
-        throw error;
-      });
+    return this.createToast(title, options);
   }
 
   dismiss(id: string): void {
