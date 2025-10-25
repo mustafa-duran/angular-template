@@ -1,0 +1,322 @@
+<ui-toast [closeButton]="true" [visibleToasts]="4"></ui-toast>
+
+<div class="min-h-screen bg-background text-foreground">
+  <header class="border-b border-border/70 bg-card/60">
+    <div class="container py-10">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p class="text-sm uppercase tracking-wide text-muted-foreground">Product ops</p>
+          <h1 class="text-2xl font-semibold">Operational control center</h1>
+        </div>
+        <ui-button variant="outline" (click)="triggerHealthToast()"
+          >Schedule health check</ui-button
+        >
+      </div>
+    </div>
+  </header>
+
+  <main class="container space-y-10 py-12">
+    <section class="rounded-xl border border-border/60 bg-card p-8 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-semibold">Project focus</h2>
+          <p class="text-sm text-muted-foreground">
+            Switch what the team watches and run automation jobs instantly.
+          </p>
+        </div>
+        <span class="text-sm text-muted-foreground">
+          Current project:
+          <span class="font-medium text-foreground">{{ projectLabel() }}</span>
+        </span>
+      </div>
+
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <div class="space-y-3">
+          <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+            Active project
+          </h3>
+          <ui-select
+            [options]="projectOptions"
+            [selectedValue]="selectedProject()"
+            placeholder="Select a project"
+            (selectionChange)="onProjectChange($event)"
+          ></ui-select>
+          <p class="text-sm text-muted-foreground">
+            Choose which initiative should receive the next status report.
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+            Quick actions
+          </h3>
+          <ui-dropdown-menu
+            [sections]="quickActions"
+            triggerLabel="Run quick action"
+            (itemSelected)="onQuickAction($event)"
+          ></ui-dropdown-menu>
+          <p class="text-sm text-muted-foreground">
+            @if (lastAction(); as action) {
+              Last action:
+              <span class="font-medium text-foreground">{{ action.label }}</span>
+            } @else {
+              Nothing queued yet.
+            }
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-border/60 bg-card p-8 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-semibold">Team onboarding</h2>
+          <p class="text-sm text-muted-foreground">
+            Invite teammates, assign context, and sync everyone before launch.
+          </p>
+        </div>
+        <ui-button (click)="openInviteDialog()">Invite teammate</ui-button>
+      </div>
+
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <div class="space-y-4">
+          <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+            Starter plays
+          </h3>
+          <p class="text-sm text-muted-foreground">
+            Pair recommended actions together to onboard the team quickly.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <ui-button variant="secondary" (click)="openInviteDialog('designer')"
+              >Invite a designer</ui-button
+            >
+            <ui-button variant="ghost" (click)="triggerHealthToast()"
+              >Share release brief</ui-button
+            >
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-dashed border-border/70 bg-background/60 p-6">
+          <h4 class="text-sm font-semibold">Launch checklist</h4>
+          <ul class="mt-4 space-y-3 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2">
+              <span class="mt-1 block h-2 w-2 rounded-full bg-border"></span>
+              <span>Confirm access for analytics and billing teams.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 block h-2 w-2 rounded-full bg-border"></span>
+              <span>Schedule customer communications with marketing.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1 block h-2 w-2 rounded-full bg-border"></span>
+              <span>Align feature flags before enabling the rollout.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-border/60 bg-card p-8 shadow-sm">
+      <div class="grid gap-6 lg:grid-cols-[260px_1fr]">
+        <div class="space-y-3">
+          <h2 class="text-xl font-semibold">Account settings</h2>
+          <p class="text-sm text-muted-foreground">
+            Keep profile information accurate and refresh credentials without leaving the console.
+          </p>
+        </div>
+
+        <ui-tabs
+          class="w-full"
+          [value]="accountSettingsTab()"
+          (valueChange)="changeAccountTab($event)"
+          defaultValue="account"
+        >
+          <ui-tabs-list>
+            <ui-tabs-trigger value="account">Account</ui-tabs-trigger>
+            <ui-tabs-trigger value="password">Password</ui-tabs-trigger>
+          </ui-tabs-list>
+
+          <div class="mt-4 rounded-xl border border-border/70 bg-background p-6 shadow-sm">
+            <ui-tabs-content value="account" class="space-y-6">
+              <div class="space-y-1">
+                <h3 class="text-lg font-semibold">Account</h3>
+                <p class="text-sm text-muted-foreground">
+                  Make changes to your account here. Click save when you're done.
+                </p>
+              </div>
+
+              <div class="grid gap-4">
+                <label class="grid gap-2 text-sm">
+                  <span class="text-muted-foreground">Name</span>
+                  <input
+                    type="text"
+                    [value]="accountName()"
+                    (input)="updateAccountName($any($event.target).value)"
+                    class="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring"
+                    autocomplete="name"
+                  />
+                </label>
+
+                <label class="grid gap-2 text-sm">
+                  <span class="text-muted-foreground">Username</span>
+                  <input
+                    type="text"
+                    [value]="accountUsername()"
+                    (input)="updateAccountUsername($any($event.target).value)"
+                    class="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring"
+                    autocomplete="username"
+                  />
+                </label>
+              </div>
+
+              <ui-button
+                class="w-fit"
+                [disabled]="isSavingAccount()"
+                (click)="saveAccountDetails()"
+              >
+                @if (isSavingAccount()) {
+                  Saving...
+                } @else {
+                  Save changes
+                }
+              </ui-button>
+            </ui-tabs-content>
+
+            <ui-tabs-content value="password" class="space-y-6">
+              <div class="space-y-1">
+                <h3 class="text-lg font-semibold">Password</h3>
+                <p class="text-sm text-muted-foreground">
+                  Update your password. You will receive a confirmation email once complete.
+                </p>
+              </div>
+
+              <div class="grid gap-4">
+                <label class="grid gap-2 text-sm">
+                  <span class="text-muted-foreground">Current password</span>
+                  <input
+                    type="password"
+                    [value]="currentPassword()"
+                    (input)="updateCurrentPassword($any($event.target).value)"
+                    class="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring"
+                    autocomplete="current-password"
+                  />
+                </label>
+
+                <label class="grid gap-2 text-sm">
+                  <span class="text-muted-foreground">New password</span>
+                  <input
+                    type="password"
+                    [value]="newPassword()"
+                    (input)="updateNewPassword($any($event.target).value)"
+                    class="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring"
+                    autocomplete="new-password"
+                  />
+                </label>
+
+                <label class="grid gap-2 text-sm">
+                  <span class="text-muted-foreground">Confirm password</span>
+                  <input
+                    type="password"
+                    [value]="confirmPassword()"
+                    (input)="updateConfirmPassword($any($event.target).value)"
+                    class="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring"
+                    autocomplete="new-password"
+                  />
+                </label>
+
+                @if (passwordMismatch()) {
+                  <p class="text-sm text-destructive">
+                    Passwords do not match. Make sure both fields use the same value.
+                  </p>
+                }
+              </div>
+
+              <ui-button
+                class="w-fit"
+                [disabled]="isUpdatingPassword() || passwordMismatch()"
+                (click)="updatePassword()"
+              >
+                @if (isUpdatingPassword()) {
+                  Updating...
+                } @else {
+                  Save password
+                }
+              </ui-button>
+            </ui-tabs-content>
+          </div>
+        </ui-tabs>
+      </div>
+    </section>
+
+    <section
+      class="grid gap-6 rounded-xl border border-border/60 bg-card p-8 shadow-sm md:grid-cols-3"
+    >
+      <div class="flex flex-col gap-4">
+        <div>
+          <h3 class="text-lg font-semibold">Release controls</h3>
+          <p class="text-sm text-muted-foreground">
+            Coordinate the final steps of a rollout directly from this panel.
+          </p>
+        </div>
+        <ui-button (click)="markPreflight()">Mark preflight complete</ui-button>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div>
+          <h3 class="text-lg font-semibold">Safety switch</h3>
+          <p class="text-sm text-muted-foreground">
+            Pause traffic if metrics start trending in the wrong direction.
+          </p>
+        </div>
+        <ui-button variant="destructive" (click)="pauseRollout()">Pause rollout</ui-button>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div>
+          <h3 class="text-lg font-semibold">Resume traffic</h3>
+          <p class="text-sm text-muted-foreground">
+            Ease customers back on the new experience once you are confident again.
+          </p>
+        </div>
+        <ui-button variant="outline" (click)="resumeRollout()">Resume gradual rollout</ui-button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<ui-dialog [open]="inviteDialogOpen()" (openChange)="inviteDialogOpen.set($event)">
+  <ui-dialog-header>
+    <ui-dialog-title>Invite a teammate</ui-dialog-title>
+    <ui-dialog-description>
+      Add collaborators to coordinate the launch. They will receive a summary email.
+    </ui-dialog-description>
+  </ui-dialog-header>
+
+  <div class="grid gap-4 py-4">
+    <label class="grid gap-2 text-sm">
+      <span class="text-muted-foreground">Email address</span>
+      <input
+        type="email"
+        [value]="inviteEmail()"
+        (input)="updateEmail($any($event.target).value)"
+        class="h-9 rounded-md border border-input bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring"
+        placeholder="teammate@company.com"
+      />
+    </label>
+
+    <label class="grid gap-2 text-sm">
+      <span class="text-muted-foreground">Role</span>
+      <ui-select
+        [options]="roleOptions"
+        [selectedValue]="inviteRole()"
+        placeholder="Choose a role"
+        (selectionChange)="updateInviteRole($event)"
+      ></ui-select>
+    </label>
+  </div>
+
+  <ui-dialog-footer>
+    <ui-button variant="outline" (click)="cancelInvite()">Cancel</ui-button>
+    <ui-button [disabled]="isSendingInvite()" (click)="sendInvite()">Send invite</ui-button>
+  </ui-dialog-footer>
+</ui-dialog>
