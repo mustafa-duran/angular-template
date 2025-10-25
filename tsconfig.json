@@ -13,7 +13,8 @@
       "@ui/select": ["./libs/ui/src/lib/select"],
       "@ui/button": ["./libs/ui/src/lib/button"],
       "@ui/dialog": ["./libs/ui/src/lib/dialog"],
-      "@ui/sonner": ["libs/ui/src/lib/toast"]
+      "@ui/sonner": ["libs/ui/src/lib/toast"],
+      "@ui/tabs": ["./libs/ui/src/lib/tabs"]
     },
     "strict": true,
     "noImplicitOverride": true,
