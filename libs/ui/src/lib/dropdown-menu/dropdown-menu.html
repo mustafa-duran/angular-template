@@ -1,0 +1,93 @@
+<button
+  type="button"
+  class="inline-flex h-9 w-full items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+  #triggerButton
+  (click)="toggleMenu()"
+  (keydown)="onTriggerKeydown($event)"
+  [attr.disabled]="disabled() ? '' : null"
+  aria-haspopup="menu"
+  [attr.aria-expanded]="open()"
+>
+  <span class="flex-1 text-left">{{ triggerLabel() }}</span>
+  <svg
+    class="h-4 w-4 opacity-60"
+    viewBox="0 0 20 20"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    aria-hidden="true"
+  >
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 8l5 5 5-5" />
+  </svg>
+</button>
+
+@if (open()) {
+  <div
+    #menuContent
+    [attr.data-dropdown-menu-content]="true"
+    [class]="
+      'absolute z-50 min-w-48 overflow-hidden rounded-md border border-border/60 bg-popover p-1 text-popover-foreground shadow-md ' +
+      contentSideClass() +
+      ' ' +
+      contentAlignmentClass()
+    "
+    [style.minWidth]="menuWidth()"
+    [style.marginTop]="resolvedSide() === 'bottom' ? sideOffset() + 'px' : null"
+    [style.marginBottom]="resolvedSide() === 'top' ? sideOffset() + 'px' : null"
+    role="menu"
+  >
+    @for (section of sections(); track trackSection($index, section); let sectionIndex = $index) {
+      <div class="py-1">
+        @if (section.label) {
+          <div class="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+            {{ section.label }}
+          </div>
+        }
+
+        @for (item of section.items; track trackItem($index, item)) {
+          <button
+            type="button"
+            #menuButton
+            data-dropdown-menu-item
+            class="relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60 data-[destructive=true]:text-destructive"
+            [attr.data-destructive]="item.destructive ? true : null"
+            [attr.disabled]="item.disabled ? '' : null"
+            (click)="selectItem(item)"
+            (keydown)="onItemKeydown($event, item)"
+            role="menuitem"
+          >
+            @if (item.icon) {
+              <svg
+                class="h-4 w-4 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                [attr.viewBox]="item.icon.viewBox ?? '0 0 24 24'"
+                aria-hidden="true"
+              >
+                <path [attr.d]="item.icon.path" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            }
+
+            <span class="flex min-w-0 flex-1 flex-col text-left">
+              <span class="truncate">{{ item.label }}</span>
+              @if (item.description) {
+                <span class="text-xs text-muted-foreground">{{ item.description }}</span>
+              }
+            </span>
+
+            @if (item.shortcut) {
+              <span class="ml-auto text-xs tracking-widest text-muted-foreground">
+                {{ item.shortcut }}
+              </span>
+            }
+          </button>
+        }
+      </div>
+
+      @if (sectionIndex < sections().length - 1) {
+        <div class="my-1 h-px bg-border/70"></div>
+      }
+    }
+  </div>
+}
