@@ -1,73 +1,49 @@
 <div
-  [attr.data-toast-container]="true"
-  [attr.data-theme]="theme()"
-  [attr.dir]="dir()"
-  [ngClass]="[toasterClasses, positionClasses(), className()]"
-  [ngStyle]="containerStyles()"
-  (mouseenter)="onContainerHover('enter')"
-  (mouseleave)="onContainerHover('leave')"
+  class="pointer-events-none fixed bottom-4 right-4 z-[100] flex w-full max-w-screen-sm flex-col items-end gap-3"
 >
-  @for (toast of visibleToastsList(); track toast.id; let idx = $index; let count = $count) {
+  @for (toast of visibleToasts(); track toast.id) {
     <div
-      [attr.data-toast-id]="toast.id"
-      [attr.data-index]="idx"
-      [style.--index]="idx"
-      [class]="getToastClasses(toast)"
-      [style.z-index]="count - idx"
-      [class.removing]="toast.removing"
+      class="pointer-events-auto flex w-[320px] items-start gap-4 rounded-lg border bg-background p-4 shadow-md"
     >
-      <div class="flex flex-1 flex-col gap-1">
+      <div class="flex flex-1 flex-col gap-2">
         @if (toast.title) {
-          <div class="text-sm font-semibold">{{ toast.title }}</div>
+          <div class="text-sm font-semibold text-foreground">{{ toast.title }}</div>
         }
         @if (toast.description) {
-          <div [class]="toastClasses.description">
-            {{ toast.description }}
-          </div>
+          <div class="text-sm text-muted-foreground">{{ toast.description }}</div>
         }
-      </div>
-
-      <div class="flex shrink-0 items-center gap-2">
-        @if (toast.action || toast.cancel) {
-          @if (toast.cancel) {
-            <button type="button" [class]="toastClasses.cancelButton" (click)="handleCancel(toast)">
-              {{ toast.cancel.label }}
-            </button>
-          }
-          @if (toast.action) {
-            <button
-              type="button"
-              [class]="toastClasses.actionButton"
-              (click)="handleAction(toast.action)"
-            >
-              {{ toast.action.label }}
-            </button>
-          }
-        }
-
-        @if (closeButton() && toast.dismissible) {
+        @if (toast.action) {
           <button
             type="button"
-            (click)="dismiss(toast.id)"
-            class="rounded-md p-1 transition-opacity hover:bg-secondary/80 focus:outline-none focus:ring-2"
+            class="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring"
+            (click)="handleAction(toast.action)"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            {{ toast.action.label }}
           </button>
         }
       </div>
+
+      @if (toast.dismissible ?? true) {
+        <button
+          type="button"
+          class="rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          (click)="dismiss(toast.id)"
+          aria-label="Close notification"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      }
     </div>
   }
 </div>
