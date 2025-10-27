@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
-import { SelectComponent, SelectOption } from '@ui/select';
+import type { SelectOption } from '@ui/select';
+import { Select } from '@ui/select';
 
 import { I18nService } from './i18n.service';
 import { LanguageCode } from './i18n.types';
 
 @Component({
   selector: 'core-i18n-select',
-  standalone: true,
-  imports: [SelectComponent],
+  imports: [Select],
   templateUrl: './i18n.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

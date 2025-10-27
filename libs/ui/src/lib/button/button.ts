@@ -9,8 +9,7 @@ import {
 import { ButtonSize, ButtonVariant } from './button.types';
 
 @Component({
-  selector: 'ui-button',
-  imports: [],
+  selector: 'button',
   templateUrl: './button.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -20,7 +19,7 @@ import { ButtonSize, ButtonVariant } from './button.types';
     '[attr.aria-disabled]': 'disabled()'
   }
 })
-export class ButtonComponent {
+export class Button {
   variant = input<ButtonVariant>(BUTTON_DEFAULT_VARIANT);
   size = input<ButtonSize>(BUTTON_DEFAULT_SIZE);
   disabled = input<boolean>(false);

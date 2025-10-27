@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,22 +13,23 @@ import {
 import { SelectOption } from './select.types';
 
 @Component({
-  selector: 'ui-select',
+  selector: 'select-root, ui-select',
+  imports: [CommonModule],
   templateUrl: './select.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-2 text-sm text-foreground'
+    class: 'flex w-full flex-col gap-2 text-sm text-foreground'
   }
 })
-export class SelectComponent {
+export class Select {
   private readonly hostRef = inject(ElementRef<HTMLElement>);
 
   @Input() options: ReadonlyArray<SelectOption> = [];
   @Input() selectedValue: string | null = null;
   @Input() placeholder = 'Select an option';
 
-  @Output() selectionChange = new EventEmitter<string>();
-  @Output() optionSelected = new EventEmitter<SelectOption>();
+  @Output() readonly selectionChange = new EventEmitter<string>();
+  @Output() readonly optionSelected = new EventEmitter<SelectOption>();
 
   readonly menuOpen = signal(false);
 

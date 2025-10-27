@@ -1,265 +1,228 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { ButtonComponent } from '@ui/button';
-import {
-  DialogComponent,
-  DialogDescriptionComponent,
-  DialogFooterComponent,
-  DialogHeaderComponent,
-  DialogTitleComponent
-} from '@ui/dialog';
-import { DropdownMenuComponent, DropdownMenuItem, DropdownMenuSection } from '@ui/dropdown-menu';
-import { SelectComponent, SelectOption } from '@ui/select';
-import {
-  TabsComponent,
-  TabsContentComponent,
-  TabsListComponent,
-  TabsTriggerComponent
-} from '@ui/tabs';
-import { ToastComponent, ToastService } from '@ui/toast';
+import type { ButtonSize, ButtonVariant } from '@ui/button';
+import { Button } from '@ui/button';
+import { Dialog, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@ui/dialog';
+import type { DropdownMenuItem, DropdownMenuSection } from '@ui/dropdown-menu';
+import { DropdownMenu } from '@ui/dropdown-menu';
+import type { SelectOption } from '@ui/select';
+import { Select } from '@ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@ui/tabs';
+import { Toast, ToastService } from '@ui/toast';
+
+interface TabExample {
+  value: string;
+  label: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-homepage',
-  standalone: true,
   imports: [
     CommonModule,
-    ButtonComponent,
-    DialogComponent,
-    DialogHeaderComponent,
-    DialogFooterComponent,
-    DialogTitleComponent,
-    DialogDescriptionComponent,
-    DropdownMenuComponent,
-    SelectComponent,
-    ToastComponent,
-    TabsComponent,
-    TabsListComponent,
-    TabsTriggerComponent,
-    TabsContentComponent
+    Button,
+    Dialog,
+    DialogHeader,
+    DialogFooter,
+    DialogTitle,
+    DialogDescription,
+    DropdownMenu,
+    Select,
+    Toast,
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent
   ],
   templateUrl: './homepage.html'
 })
 export class Homepage {
   private readonly toast = inject(ToastService);
 
-  readonly projectOptions: ReadonlyArray<SelectOption> = [
-    { value: 'analytics', label: 'Analytics Dashboard' },
-    { value: 'billing', label: 'Billing Service' },
-    { value: 'mobile', label: 'Mobile App' },
-    { value: 'website', label: 'Marketing Website' }
+  readonly buttonVariants: ReadonlyArray<{ label: string; variant: ButtonVariant }> = [
+    { label: 'Default', variant: 'default' },
+    { label: 'Secondary', variant: 'secondary' },
+    { label: 'Outline', variant: 'outline' },
+    { label: 'Ghost', variant: 'ghost' },
+    { label: 'Link', variant: 'link' },
+    { label: 'Destructive', variant: 'destructive' }
   ];
 
-  readonly quickActions: ReadonlyArray<DropdownMenuSection> = [
+  readonly buttonSizes: ReadonlyArray<{ label: string; size: ButtonSize; variant: ButtonVariant }> =
+    [
+      { label: 'Small', size: 'sm', variant: 'default' },
+      { label: 'Default', size: 'default', variant: 'default' },
+      { label: 'Large', size: 'lg', variant: 'default' },
+      { label: 'Icon', size: 'icon', variant: 'secondary' }
+    ];
+
+  readonly frameworkOptions: ReadonlyArray<SelectOption> = [
+    { value: 'angular', label: 'Angular' },
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'svelte', label: 'Svelte' }
+  ];
+
+  readonly selectedFramework = signal(this.frameworkOptions[0].value);
+
+  readonly frameworkLabel = computed(() => {
+    const current = this.frameworkOptions.find(
+      (option) => option.value === this.selectedFramework()
+    );
+    return current?.label ?? 'Unknown';
+  });
+
+  readonly dropdownSections: ReadonlyArray<DropdownMenuSection> = [
     {
-      id: 'alerts',
-      label: 'Alerts',
+      id: 'workspace',
+      label: 'Workspace',
       items: [
         {
-          value: 'publish-report',
-          label: 'Share weekly report',
-          description: 'Send a digest to the leadership channel',
-          shortcut: '⇧⌘P'
+          value: 'create-draft',
+          label: 'Create draft',
+          description: 'Start a new initiative from scratch'
         },
         {
-          value: 'restart-services',
-          label: 'Restart services',
-          description: 'Queue rolling restarts for the cluster',
-          shortcut: '⌘R'
+          value: 'import-docs',
+          label: 'Import docs',
+          description: 'Bring content in from another workspace'
         }
       ]
     },
     {
-      id: 'team',
-      label: 'Team',
+      id: 'operations',
+      label: 'Operations',
       items: [
         {
-          value: 'add-seat',
-          label: 'Purchase extra seats',
-          description: 'Opens billing to add seats',
-          shortcut: '⌘B'
+          value: 'share-update',
+          label: 'Share status update',
+          description: 'Post a weekly note to the team wall'
         },
         {
-          value: 'archive-project',
-          label: 'Archive project',
+          value: 'pause-reports',
+          label: 'Pause automated reports',
           destructive: true,
-          description: 'Hide the project for all members'
+          description: 'Temporarily stop sending scheduled emails'
         }
       ]
     }
   ];
 
-  readonly roleOptions: ReadonlyArray<SelectOption> = [
-    { value: 'member', label: 'Product Member' },
-    { value: 'analyst', label: 'Data Analyst' },
-    { value: 'designer', label: 'Product Designer' },
-    { value: 'developer', label: 'Developer' }
+  readonly lastMenuItem = signal<DropdownMenuItem | null>(null);
+
+  readonly tabsExamples: ReadonlyArray<TabExample> = [
+    {
+      value: 'overview',
+      label: 'Overview',
+      description: 'High-level progress, goals, and health indicators for stakeholders.'
+    },
+    {
+      value: 'activity',
+      label: 'Activity',
+      description: 'Chronological log of significant events and cross-functional updates.'
+    },
+    {
+      value: 'notes',
+      label: 'Notes',
+      description: 'Scratchpad for meeting highlights, action items, and decision context.'
+    }
   ];
 
-  readonly selectedProject = signal(this.projectOptions[0].value);
-  readonly lastAction = signal<DropdownMenuItem | null>(null);
-  readonly inviteDialogOpen = signal(false);
-  readonly inviteEmail = signal('');
-  readonly inviteRole = signal(this.roleOptions[0].value);
-  readonly isSendingInvite = signal(false);
-  readonly accountSettingsTab = signal<'account' | 'password'>('account');
-  readonly accountName = signal('Pedro Duarte');
-  readonly accountUsername = signal('@peduarte');
-  readonly currentPassword = signal('');
-  readonly newPassword = signal('');
-  readonly confirmPassword = signal('');
-  readonly isSavingAccount = signal(false);
-  readonly isUpdatingPassword = signal(false);
-  readonly passwordMismatch = computed(() => {
-    const nextPassword = this.newPassword();
-    const confirmation = this.confirmPassword();
-    return nextPassword.length > 0 && confirmation.length > 0 && nextPassword !== confirmation;
-  });
+  readonly activeTab = signal(this.tabsExamples[0].value);
 
-  readonly projectLabel = computed(() => {
-    const current = this.projectOptions.find((option) => option.value === this.selectedProject());
-    return current?.label ?? 'Unassigned';
-  });
+  readonly reminderAudienceOptions: ReadonlyArray<SelectOption> = [
+    { value: 'product', label: 'Product team' },
+    { value: 'marketing', label: 'Marketing team' },
+    { value: 'ops', label: 'Operations group' }
+  ];
 
-  onProjectChange(value: string): void {
-    this.selectedProject.set(value);
-    const label = this.projectOptions.find((option) => option.value === value)?.label ?? value;
-    this.toast.toast('Project switched', {
-      description: `${label} is now the focus for daily reports.`
+  readonly reminderAudience = signal(this.reminderAudienceOptions[0].value);
+  readonly reminderNote = signal('');
+  readonly dialogOpen = signal(false);
+
+  onFrameworkChange(value: string): void {
+    this.selectedFramework.set(value);
+    const label = this.frameworkOptions.find((option) => option.value === value)?.label ?? value;
+    this.toast.toast('Framework selected', {
+      description: `${label} will be used for the next integration example.`
     });
   }
 
-  onQuickAction(item: DropdownMenuItem): void {
-    this.lastAction.set(item);
-    const description = item.description ?? 'We will keep you posted in the activity feed.';
-    this.toast.toast(item.label, { description });
+  onMenuSelect(item: DropdownMenuItem): void {
+    this.lastMenuItem.set(item);
+    this.toast.toast(item.label, {
+      description: item.description ?? 'Action added to the automation queue.'
+    });
   }
 
-  openInviteDialog(defaultRole: string = this.roleOptions[0].value): void {
-    this.inviteRole.set(defaultRole);
-    this.inviteDialogOpen.set(true);
-  }
-
-  updateEmail(value: string): void {
-    this.inviteEmail.set(value);
-  }
-
-  updateInviteRole(value: string): void {
-    this.inviteRole.set(value);
-  }
-
-  cancelInvite(): void {
-    this.inviteDialogOpen.set(false);
-    this.inviteEmail.set('');
-  }
-
-  async sendInvite(): Promise<void> {
-    if (this.isSendingInvite()) {
+  changeTab(value: string | null): void {
+    if (!value) {
       return;
     }
-
-    this.isSendingInvite.set(true);
-
-    const email = this.inviteEmail();
-    const roleLabel = this.roleOptions.find((option) => option.value === this.inviteRole())?.label;
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    this.toast.toast('Invitation sent', {
-      description: email
-        ? `${email} will join as ${roleLabel ?? 'member'}.`
-        : `A new ${roleLabel ?? 'member'} invite is on its way.`
-    });
-
-    this.isSendingInvite.set(false);
-    this.inviteDialogOpen.set(false);
-    this.inviteEmail.set('');
+    this.activeTab.set(value);
   }
 
-  triggerHealthToast(): void {
-    this.toast.toast('Daily health check queued', {
-      description: 'We will email the status summary in a few minutes.'
-    });
+  openDialog(): void {
+    this.setDialogOpen(true);
   }
 
-  markPreflight(): void {
-    this.toast.toast('Preflight checklist approved', {
-      description: 'QA signed off on the latest release build.'
-    });
+  closeDialog(): void {
+    this.setDialogOpen(false);
   }
 
-  pauseRollout(): void {
-    this.toast.toast('Rollout paused', {
-      description: 'Traffic is routed back to the previous stable version.'
-    });
+  handleDialogOpenChange(open: boolean): void {
+    this.setDialogOpen(open);
   }
 
-  resumeRollout(): void {
-    this.toast.toast('Rollout resumed', {
-      description: 'We will gradually shift customers to the new release.'
-    });
+  updateReminderNote(value: string): void {
+    this.reminderNote.set(value);
   }
 
-  changeAccountTab(value: string | null): void {
-    if (value === 'account' || value === 'password') {
-      this.accountSettingsTab.set(value);
-    }
+  updateReminderAudience(value: string): void {
+    this.reminderAudience.set(value);
   }
 
-  updateAccountName(value: string): void {
-    this.accountName.set(value);
-  }
-
-  updateAccountUsername(value: string): void {
-    this.accountUsername.set(value);
-  }
-
-  updateCurrentPassword(value: string): void {
-    this.currentPassword.set(value);
-  }
-
-  updateNewPassword(value: string): void {
-    this.newPassword.set(value);
-  }
-
-  updateConfirmPassword(value: string): void {
-    this.confirmPassword.set(value);
-  }
-
-  async saveAccountDetails(): Promise<void> {
-    if (this.isSavingAccount()) {
-      return;
-    }
-
-    this.isSavingAccount.set(true);
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    this.toast.toast('Account updated', {
-      description: 'Name and username changes were saved successfully.'
-    });
-    this.isSavingAccount.set(false);
-  }
-
-  async updatePassword(): Promise<void> {
-    if (this.isUpdatingPassword() || this.passwordMismatch()) {
-      return;
-    }
-
-    if (!this.currentPassword() || !this.newPassword()) {
-      this.toast.toast('Incomplete form', {
-        description: 'Fill out the current and new password fields before saving.'
+  submitReminder(): void {
+    const note = this.reminderNote().trim();
+    if (!note) {
+      this.toast.toast('Add a reminder note', {
+        description: 'Write what should happen when the reminder fires.'
       });
       return;
     }
 
-    this.isUpdatingPassword.set(true);
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    this.toast.toast('Password updated', {
-      description: 'Your password is now refreshed across all active sessions.'
+    const audienceLabel =
+      this.reminderAudienceOptions.find((option) => option.value === this.reminderAudience())
+        ?.label ?? 'team';
+
+    this.toast.toast('Reminder scheduled', {
+      description: `We will notify the ${audienceLabel.toLowerCase()} tomorrow morning.`
     });
 
-    this.currentPassword.set('');
-    this.newPassword.set('');
-    this.confirmPassword.set('');
-    this.isUpdatingPassword.set(false);
-    this.accountSettingsTab.set('account');
+    this.setDialogOpen(false);
+  }
+
+  showToast(): void {
+    this.toast.toast('Workspace synced', {
+      description: 'We pulled the latest data and refreshed visible dashboards.',
+      action: {
+        label: 'View logs',
+        onClick: () => {
+          this.toast.toast('Opening logs', {
+            description: 'System logs open in a new tab.'
+          });
+        }
+      }
+    });
+  }
+
+  private setDialogOpen(open: boolean): void {
+    this.dialogOpen.set(open);
+
+    if (!open) {
+      const defaultAudience = this.reminderAudienceOptions[0]?.value ?? 'product';
+      this.reminderNote.set('');
+      this.reminderAudience.set(defaultAudience);
+    }
   }
 }

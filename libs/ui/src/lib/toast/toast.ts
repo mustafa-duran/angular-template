@@ -5,12 +5,12 @@ import { ToastService } from './toast.service';
 import type { ToastAction } from './toast.types';
 
 @Component({
-  selector: 'ui-toast',
+  selector: 'toast',
   imports: [CommonModule],
   templateUrl: './toast.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToastComponent implements OnDestroy {
+export class Toast implements OnDestroy {
   private readonly toastService = inject(ToastService);
 
   readonly toasts = this.toastService.toasts$;
@@ -22,10 +22,6 @@ export class ToastComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.toastService.dismissAll();
-  }
-
-  dismiss(id: string): void {
-    this.toastService.dismiss(id);
   }
 
   handleAction(action: ToastAction | undefined): void {

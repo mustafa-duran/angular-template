@@ -94,7 +94,6 @@
       "projectType": "library",
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
-      "prefix": "core",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -120,7 +119,6 @@
       "projectType": "library",
       "root": "libs/ui",
       "sourceRoot": "libs/ui/src",
-      "prefix": "ui",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",

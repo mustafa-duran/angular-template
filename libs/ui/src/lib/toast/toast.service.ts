@@ -21,8 +21,7 @@ export class ToastService {
       title,
       description: options?.description,
       action: options?.action,
-      duration,
-      dismissible: options?.dismissible ?? true
+      duration
     };
 
     this.toasts.update((current) => {

@@ -9,12 +9,10 @@ export interface Toast {
   description?: string;
   action?: ToastAction;
   duration?: number;
-  dismissible?: boolean;
 }
 
 export interface ToastOptions {
   description?: string;
   action?: ToastAction;
   duration?: number;
-  dismissible?: boolean;
 }

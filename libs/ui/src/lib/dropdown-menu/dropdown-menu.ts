@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,8 +24,8 @@ import {
 } from './dropdown-menu.types';
 
 @Component({
-  selector: 'ui-dropdown-menu',
-  imports: [],
+  selector: 'dropdown-menu',
+  imports: [CommonModule],
   templateUrl: './dropdown-menu.html',
   styles: [
     `
@@ -76,20 +77,20 @@ import {
     '[attr.data-side]': 'resolvedSide()'
   }
 })
-export class DropdownMenuComponent {
+export class DropdownMenu {
   private readonly hostRef = inject(ElementRef<HTMLElement>);
 
-  sections = input<ReadonlyArray<DropdownMenuSection>>([]);
-  triggerLabel = input<string>('Open');
-  disabled = input<boolean>(false);
-  align = input<DropdownMenuAlign>('start');
-  side = input<DropdownMenuSide>('bottom');
-  sideOffset = input<number>(8);
-  menuWidth = input<string>('14rem');
-  closeOnSelect = input<boolean>(true);
-  class = input<string>('');
+  readonly sections = input<ReadonlyArray<DropdownMenuSection>>([]);
+  readonly triggerLabel = input<string>('Open');
+  readonly disabled = input<boolean>(false);
+  readonly align = input<DropdownMenuAlign>('start');
+  readonly side = input<DropdownMenuSide>('bottom');
+  readonly sideOffset = input<number>(8);
+  readonly menuWidth = input<string>('14rem');
+  readonly closeOnSelect = input<boolean>(true);
+  readonly class = input<string>('');
 
-  open = model<boolean>(false);
+  readonly open = model<boolean>(false);
 
   @Output() readonly itemSelected = new EventEmitter<DropdownMenuItem>();
 

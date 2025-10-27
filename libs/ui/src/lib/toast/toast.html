@@ -3,45 +3,24 @@
 >
   @for (toast of visibleToasts(); track toast.id) {
     <div
-      class="pointer-events-auto flex w-[320px] items-start gap-4 rounded-lg border bg-background p-4 shadow-md"
+      class="pointer-events-auto relative flex w-[360px] items-start justify-between gap-3 overflow-hidden rounded-lg border bg-background/95 p-4 shadow-md backdrop-blur"
     >
-      <div class="flex flex-1 flex-col gap-2">
+      <div class="flex flex-1 flex-col gap-1">
         @if (toast.title) {
           <div class="text-sm font-semibold text-foreground">{{ toast.title }}</div>
         }
         @if (toast.description) {
           <div class="text-sm text-muted-foreground">{{ toast.description }}</div>
         }
-        @if (toast.action) {
-          <button
-            type="button"
-            class="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring"
-            (click)="handleAction(toast.action)"
-          >
-            {{ toast.action.label }}
-          </button>
-        }
       </div>
 
-      @if (toast.dismissible ?? true) {
+      @if (toast.action) {
         <button
           type="button"
-          class="rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          (click)="dismiss(toast.id)"
-          aria-label="Close notification"
+          class="inline-flex h-9 shrink-0 items-center justify-center self-center rounded-md border border-border/70 bg-transparent px-3 text-xs font-medium text-foreground transition-colors hover:bg-foreground/10 focus:outline-none focus:ring-2 focus:ring-ring"
+          (click)="handleAction(toast.action)"
         >
-          <svg
-            class="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
+          {{ toast.action.label }}
         </button>
       }
     </div>

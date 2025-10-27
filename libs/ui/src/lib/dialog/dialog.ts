@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,20 +15,31 @@ import {
 } from './dialog.constants';
 
 @Component({
-  selector: 'ui-dialog',
-  imports: [],
+  selector: 'dialog',
+  imports: [CommonModule],
   templateUrl: './dialog.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styles: [
+    `
+      :host {
+        display: contents !important;
+      }
+    `
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[attr.data-state]': 'dataState()',
+    '[attr.open]': 'open() ? "" : null'
+  }
 })
-export class DialogComponent {
-  open = model<boolean>(false);
-  showCloseButton = input<boolean>(true);
+export class Dialog {
+  readonly open = model<boolean>(false);
+  readonly showCloseButton = input<boolean>(true);
 
   readonly overlayClasses = DIALOG_OVERLAY_CLASSES;
   readonly contentClasses = DIALOG_CONTENT_CLASSES;
   readonly closeButtonClasses = DIALOG_CLOSE_BUTTON_CLASSES;
 
-  dataState = computed(() => (this.open() ? 'open' : 'closed'));
+  readonly dataState = computed(() => (this.open() ? 'open' : 'closed'));
 
   constructor() {
     effect(() => {
